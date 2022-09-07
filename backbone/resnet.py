@@ -2,10 +2,8 @@ import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 
-
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
-
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -21,9 +19,11 @@ def conv3x3(in_planes, out_planes, stride=1):
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
                      padding=1, bias=False)
 
+
 def conv1x1(in_planes, out_planes, stride=1):
     """1x1 convolution"""
     return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
+
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -55,6 +55,7 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
 
         return out
+
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -92,6 +93,7 @@ class Bottleneck(nn.Module):
         out = self.relu(out)
 
         return out
+
 
 class ResNet(nn.Module):
 
@@ -153,7 +155,7 @@ class ResNet(nn.Module):
         C_5 = self.layer4(C_4)
 
         return C_5
-            
+
 def resnet18(pretrained=False, **kwargs):
     """Constructs a ResNet-18 model.
 
@@ -166,6 +168,7 @@ def resnet18(pretrained=False, **kwargs):
         model.load_state_dict(model_zoo.load_url(model_urls['resnet18']), strict=False)
     return model
 
+
 def resnet34(pretrained=False, **kwargs):
     """Constructs a ResNet-34 model.
 
@@ -176,6 +179,7 @@ def resnet34(pretrained=False, **kwargs):
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['resnet34']), strict=False)
     return model
+
 
 def resnet50(pretrained=False, **kwargs):
     """Constructs a ResNet-50 model.
@@ -188,6 +192,7 @@ def resnet50(pretrained=False, **kwargs):
         model.load_state_dict(model_zoo.load_url(model_urls['resnet50']), strict=False)
     return model
 
+
 def resnet101(pretrained=False, **kwargs):
     """Constructs a ResNet-101 model.
 
@@ -198,6 +203,7 @@ def resnet101(pretrained=False, **kwargs):
     if pretrained:
         model.load_state_dict(model_zoo.load_url(model_urls['resnet101']), strict=False)
     return model
+
 
 def resnet152(pretrained=False, **kwargs):
     """Constructs a ResNet-152 model.
@@ -210,12 +216,14 @@ def resnet152(pretrained=False, **kwargs):
         model.load_state_dict(model_zoo.load_url(model_urls['resnet152']))
     return model
 
-if __name__=='__main__':
-    #model = torchvision.models.resnet50()
+
+if __name__ == '__main__':
+    # model = torchvision.models.resnet50()
     print("found ", torch.cuda.device_count(), " GPU(s)")
     device = torch.device("cuda")
-    model = resnet101(detection=True).to(device)
-    print(model)
+    model = resnet18(pretrained=True).to(device)
+    # print(model)
 
-    input = torch.randn(1, 3, 512, 512).to(device)
+    input = torch.randn(1, 3, 416, 416).to(device)
+    # torch.randn()返回一个张量，包含了从标准正态分布（均值为0，方差为1，即高斯白噪声）中抽取的一组随机数。张量的形状由参数size定义。
     output = model(input)
